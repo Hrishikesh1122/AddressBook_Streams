@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -178,10 +179,17 @@ public class AddressBookRunner {
 		}
 		else {
 			System.out.println("City not found");
+		}	
+	}
+	
+	/**
+	 * UC11 Sort by First name in Alphabetical order
+	 */
+	private void sortByFirstName() {
+		for(String key : Books.keySet()) {
+			Books.get(key).stream().sorted(Comparator.comparing(Person::getFirstName)).collect(Collectors.toList())
+			.forEach(Person -> System.out.println(Person.toString()));
 		}
-		
-		
-		
 	}
 		
 	public static void main(String[] args) {
@@ -190,7 +198,7 @@ public class AddressBookRunner {
 		
 		boolean isExit = false;
 		while (!isExit) {
-			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.Exit");
+			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.SortByName\n8.Exit");
 			int userInput =sc.nextInt();
 			switch (userInput) {
 			case 1: 
@@ -211,7 +219,10 @@ public class AddressBookRunner {
 			case 6 :
 				runner.searchBycity();
 				break;
-			case 7 :
+			case 7:
+				runner.sortByFirstName();
+				break;
+			case 8 :
 				isExit=true;
 				break;
 			default :
