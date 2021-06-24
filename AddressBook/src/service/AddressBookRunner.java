@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import model.Person;
@@ -164,17 +165,22 @@ public class AddressBookRunner {
 	 * Gets city name from user 
 	 * If Hashmap contains that city as key it will display all contacts in list
 	 * using stream.
-	 * Else displays message "City not found"
+	 * Else displays message "City not found".
+	 * Use of Atomic integer is to count number of contacts in a city within lambda expression.
 	 */
 	private void searchBycity() {
 		System.out.println("Enter city name to display all contacts");
 		String searchKey = sc.next();
+		AtomicInteger count = new AtomicInteger(0);
 		if(Books.containsKey(searchKey)) {
-			Books.get(searchKey).stream().forEach(Person -> System.out.println(Person.toString()));
+			Books.get(searchKey).stream().forEach(Person -> {System.out.println(Person.toString());count.incrementAndGet();});
+			System.out.println("Number of contacts : "+count.get());
 		}
 		else {
 			System.out.println("City not found");
 		}
+		
+		
 		
 	}
 		
