@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import model.Person;
 
@@ -142,6 +143,21 @@ public class AddressBookRunner {
 	private void show() {
 		System.out.println(Books);
 	}
+	
+	/**
+	 * UC8 : Ability to search person across all cities
+	 * Here Name of cities are stored as key of Hashmap
+	 * For loop iterates over all keys
+	 * Use of stream to search target person 
+	 */
+	private void search() {
+		System.out.println("Enter name to search across all books");
+		String searchKey = sc.next();
+		for(String key : Books.keySet()) {
+				Books.get(key).stream().filter(personList1->personList1.getFirstName().equals(searchKey)).
+				collect(Collectors.toList()).forEach(Person -> System.out.println(Person.toString()));	
+		}
+	}
 		
 	public static void main(String[] args) {
 		AddressBookRunner runner = new AddressBookRunner();
@@ -149,7 +165,7 @@ public class AddressBookRunner {
 		
 		boolean isExit = false;
 		while (!isExit) {
-			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Exit");
+			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.Exit");
 			int userInput =sc.nextInt();
 			switch (userInput) {
 			case 1: 
@@ -165,6 +181,9 @@ public class AddressBookRunner {
 				runner.show();
 				break;
 			case 5 :
+				runner.search();
+				break;
+			case 6 :
 				isExit=true;
 				break;
 			default :
