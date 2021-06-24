@@ -119,6 +119,10 @@ public class AddressBookRunner {
 		System.out.println("Person removed from Address book");
 	}
 	
+	private void show() {
+		System.out.println(personList);
+	}
+	
 	
 	public static void main(String[] args) {
 		AddressBookRunner runner = new AddressBookRunner();
