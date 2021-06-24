@@ -18,6 +18,31 @@ public class AddressBookRunner {
 		System.out.println("Welcome to address book");
 	}
 	
+	/**
+	 * UC2 
+	 * This method adds object person and its fields to ArrayList
+	 */
+	private void add() {
+		 Person person = new Person();
+		 System.out.println("First Name :");
+		 person.setFirstName(sc.next());
+		 System.out.println("Last name : ");
+		 person.setLastName(sc.next());
+		 System.out.println("Address :");
+		 person.setAddress(sc.next());
+		 System.out.println("City :");
+		 person.setCity(sc.next());
+		 System.out.println("State :");
+		 person.setState(sc.next());
+		 System.out.println("Zip :");
+		 person.setZip(sc.next());
+		 System.out.println("Phone :");
+		 person.setPhone(sc.next());
+		 System.out.println("Email :");
+		 person.setEmail(sc.next());
+		 
+		 personList.add(person);		 
+	 }
 	
 	
 	public static void main(String[] args) {
