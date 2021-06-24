@@ -44,6 +44,65 @@ public class AddressBookRunner {
 		 personList.add(person);		 
 	 }
 	
+	/**
+	 * UC3
+	 * This method finds person according to first name and change its field according to user input
+	 */
+	private void edit() {
+		String enteredName;
+		System.out.println("Enter First name of contact to edit it ");
+		enteredName=sc.next();
+		for(int i=0;i<personList.size();i++)
+		{
+			if(personList.get(i).getFirstName().equals(enteredName))
+			{
+				int check=0;
+				System.out.println("Person found , what do you want to edit ?");
+				System.out.println("Enter\n1.First Name\n2.Last Name\n3.Address\n4.city\n5.State\n6.Zip\n7.Phone\n8.Email");
+				check=sc.nextInt();
+				switch(check) {
+				case 1:
+					System.out.println("Enter new first name");
+					personList.get(i).setFirstName(sc.next());
+					break;
+				case 2:
+					System.out.println("Enter new last name");
+					personList.get(i).setLastName(sc.next());
+					break;
+				case 3:
+					System.out.println("Enter new Address");
+					personList.get(i).setAddress(sc.next());
+					break;
+				case 4:
+					System.out.println("Enter new city");
+					personList.get(i).setCity(sc.next());
+					break;
+				case 5:
+					System.out.println("Enter new state");
+					personList.get(i).setState(sc.next());
+					break;
+				case 6:
+					System.out.println("Enter new zip");
+					personList.get(i).setZip(sc.next());
+					break;
+				case 7:
+					System.out.println("Enter new phone number");
+					personList.get(i).setPhone(sc.next());
+					break;
+				case 8:
+					System.out.println("Enter new email");
+					personList.get(i).setEmail(sc.next());
+					break;
+				default :
+					System.out.println("Invalid Entry");
+						
+				}
+			}
+		}
+		
+		
+	}
+	
 	
 	public static void main(String[] args) {
 		AddressBookRunner runner = new AddressBookRunner();

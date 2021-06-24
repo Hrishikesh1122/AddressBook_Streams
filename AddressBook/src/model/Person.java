@@ -1,3 +1,10 @@
+/**
+ * Purpose : A POJO to set and get fields of Person
+ * @author Hrishikesh Ugavekar
+ * @Version 1.0
+ * @since 07-06-2021
+ *
+ */
 package model;
 
 public class Person {
