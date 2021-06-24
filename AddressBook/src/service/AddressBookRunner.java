@@ -103,6 +103,22 @@ public class AddressBookRunner {
 		
 	}
 	
+
+	/**
+	 * UC4
+	 * This method removes person from list according to first name.
+	 */
+	private void delete() {
+		System.out.println("Enter First name of contact to delete it ");
+		String enteredName=sc.next();
+		for(int i=0;i<personList.size();i++)
+		{
+			if(personList.get(i).getFirstName().equals(enteredName))
+				personList.remove(i);
+		}
+		System.out.println("Person removed from Address book");
+	}
+	
 	
 	public static void main(String[] args) {
 		AddressBookRunner runner = new AddressBookRunner();
