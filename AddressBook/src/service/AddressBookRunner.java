@@ -158,6 +158,25 @@ public class AddressBookRunner {
 				collect(Collectors.toList()).forEach(Person -> System.out.println(Person.toString()));	
 		}
 	}
+	
+	/**
+	 * UC9 : Ability to view persons by city
+	 * Gets city name from user 
+	 * If Hashmap contains that city as key it will display all contacts in list
+	 * using stream.
+	 * Else displays message "City not found"
+	 */
+	private void searchBycity() {
+		System.out.println("Enter city name to display all contacts");
+		String searchKey = sc.next();
+		if(Books.containsKey(searchKey)) {
+			Books.get(searchKey).stream().forEach(Person -> System.out.println(Person.toString()));
+		}
+		else {
+			System.out.println("City not found");
+		}
+		
+	}
 		
 	public static void main(String[] args) {
 		AddressBookRunner runner = new AddressBookRunner();
@@ -165,7 +184,7 @@ public class AddressBookRunner {
 		
 		boolean isExit = false;
 		while (!isExit) {
-			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.Exit");
+			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.Exit");
 			int userInput =sc.nextInt();
 			switch (userInput) {
 			case 1: 
@@ -184,6 +203,9 @@ public class AddressBookRunner {
 				runner.search();
 				break;
 			case 6 :
+				runner.searchBycity();
+				break;
+			case 7 :
 				isExit=true;
 				break;
 			default :
