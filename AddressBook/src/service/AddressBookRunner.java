@@ -1,7 +1,9 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import model.Person;
@@ -9,7 +11,9 @@ import model.Person;
 public class AddressBookRunner {
 	
 	 private static Scanner sc = new Scanner(System.in);
-	 List<Person> personList = new ArrayList<>();
+	 private ArrayList<Person> personList1 =null;
+	 private Map<String,ArrayList<Person>> Books= new HashMap<>();
+	 public String city;
 
 	/**
 	 *Displays welcome message 
@@ -23,6 +27,9 @@ public class AddressBookRunner {
 	 * This method adds object person and its fields to ArrayList
 	 */
 	private void add() {
+	
+		 System.out.println("To which city you want to add ?");
+		 city =sc.next();
 		 Person person = new Person();
 		 System.out.println("First Name :");
 		 person.setFirstName(sc.next());
@@ -41,7 +48,16 @@ public class AddressBookRunner {
 		 System.out.println("Email :");
 		 person.setEmail(sc.next());
 		 
-		 personList.add(person);		 
+		 
+		 if(Books.containsKey(city)) {
+			 Books.get(city).add(person); 
+		 }
+		 else {
+			 personList1 = new ArrayList<>();
+			 personList1.add(person);
+			 Books.put(city, personList1);
+		 }
+		 
 	 }
 	
 	/**
@@ -49,12 +65,14 @@ public class AddressBookRunner {
 	 * This method finds person according to first name and change its field according to user input
 	 */
 	private void edit() {
+		System.out.println("Enter the city to which u want to edit person ");
+		city=sc.next();
 		String enteredName;
 		System.out.println("Enter First name of contact to edit it ");
 		enteredName=sc.next();
-		for(int i=0;i<personList.size();i++)
+		for(int i=0;i<Books.get(city).size();i++)
 		{
-			if(personList.get(i).getFirstName().equals(enteredName))
+			if(Books.get(city).get(i).getFirstName().equals(enteredName))
 			{
 				int check=0;
 				System.out.println("Person found , what do you want to edit ?");
@@ -63,35 +81,35 @@ public class AddressBookRunner {
 				switch(check) {
 				case 1:
 					System.out.println("Enter new first name");
-					personList.get(i).setFirstName(sc.next());
+					Books.get(city).get(i).setFirstName(sc.next());
 					break;
 				case 2:
 					System.out.println("Enter new last name");
-					personList.get(i).setLastName(sc.next());
+					Books.get(city).get(i).setLastName(sc.next());
 					break;
 				case 3:
 					System.out.println("Enter new Address");
-					personList.get(i).setAddress(sc.next());
+					Books.get(city).get(i).setAddress(sc.next());
 					break;
 				case 4:
 					System.out.println("Enter new city");
-					personList.get(i).setCity(sc.next());
+					Books.get(city).get(i).setCity(sc.next());
 					break;
 				case 5:
 					System.out.println("Enter new state");
-					personList.get(i).setState(sc.next());
+					Books.get(city).get(i).setState(sc.next());
 					break;
 				case 6:
 					System.out.println("Enter new zip");
-					personList.get(i).setZip(sc.next());
+					Books.get(city).get(i).setZip(sc.next());
 					break;
 				case 7:
 					System.out.println("Enter new phone number");
-					personList.get(i).setPhone(sc.next());
+					Books.get(city).get(i).setPhone(sc.next());
 					break;
 				case 8:
 					System.out.println("Enter new email");
-					personList.get(i).setEmail(sc.next());
+					Books.get(city).get(i).setEmail(sc.next());
 					break;
 				default :
 					System.out.println("Invalid Entry");
@@ -111,19 +129,21 @@ public class AddressBookRunner {
 	private void delete() {
 		System.out.println("Enter First name of contact to delete it ");
 		String enteredName=sc.next();
-		for(int i=0;i<personList.size();i++)
+		for(int i=0;i<Books.get(city).size();i++)
 		{
-			if(personList.get(i).getFirstName().equals(enteredName))
-				personList.remove(i);
+			if(Books.get(city).get(i).getFirstName().equals(enteredName))
+				Books.get(city).remove(i);
 		}
 		System.out.println("Person removed from Address book");
 	}
 	
+	/**
+	 * Displays books on console
+	 */
 	private void show() {
-		System.out.println(personList);
+		System.out.println(Books);
 	}
-	
-	
+		
 	public static void main(String[] args) {
 		AddressBookRunner runner = new AddressBookRunner();
 		runner.displayWelcome();
