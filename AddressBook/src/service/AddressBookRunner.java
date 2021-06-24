@@ -191,6 +191,16 @@ public class AddressBookRunner {
 			.forEach(Person -> System.out.println(Person.toString()));
 		}
 	}
+	
+	/**
+	 * UC12 Sort by city name
+	 */
+	private void sortByCity() {
+		for(String key : Books.keySet()) {
+			Books.get(key).stream().sorted(Comparator.comparing(Person::getCity)).collect(Collectors.toList())
+			.forEach(Person -> System.out.println(Person.toString()));
+		}
+	}
 		
 	public static void main(String[] args) {
 		AddressBookRunner runner = new AddressBookRunner();
@@ -198,7 +208,7 @@ public class AddressBookRunner {
 		
 		boolean isExit = false;
 		while (!isExit) {
-			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.SortByName\n8.Exit");
+			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.SortByName\n8.SortByCity\n9.Exit");
 			int userInput =sc.nextInt();
 			switch (userInput) {
 			case 1: 
@@ -222,7 +232,10 @@ public class AddressBookRunner {
 			case 7:
 				runner.sortByFirstName();
 				break;
-			case 8 :
+			case 8:
+				runner.sortByCity();
+				break;
+			case 9 :
 				isExit=true;
 				break;
 			default :
