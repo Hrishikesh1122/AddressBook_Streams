@@ -1,5 +1,10 @@
 package service;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -201,14 +206,58 @@ public class AddressBookRunner {
 			.forEach(Person -> System.out.println(Person.toString()));
 		}
 	}
+	
+	/**
+	 * Purpose : Writes contact book to file contactbook.txt
+	 * @throws IOException 
+	 */
+	public void writeToFile() throws IOException {
+		FileOutputStream writeData = new FileOutputStream("contactbook.txt");
+		ObjectOutputStream writeStream = new ObjectOutputStream(writeData);
+		try {
 		
-	public static void main(String[] args) {
+			writeStream.writeObject(Books);
+			writeStream.flush();
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			writeStream.close();
+			
+		}
+		
+	}
+	
+
+	/**
+	 * Reads objects from file
+	 * Prints them on console
+	 * @throws IOException 
+	 */
+	public void readFromFile() throws IOException {
+		FileInputStream readData = new FileInputStream("contactbook.txt");
+		ObjectInputStream readStream = new ObjectInputStream(readData);
+		try {
+			Map<String,ArrayList<Person>> newBooks = (Map<String, ArrayList<Person>>) readStream.readObject();
+			System.out.println(newBooks);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		finally {
+			readStream.close();
+		}
+	}
+		
+	public static void main(String[] args) throws IOException {
 		AddressBookRunner runner = new AddressBookRunner();
 		runner.displayWelcome();
 		
 		boolean isExit = false;
 		while (!isExit) {
-			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.SortByName\n8.SortByCity\n9.Exit");
+			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.SortByName\n"
+					+ "8.SortByCity\n9.WriteToFile\n10.ReadFromFile\n11.Exit");
 			int userInput =sc.nextInt();
 			switch (userInput) {
 			case 1: 
@@ -236,6 +285,12 @@ public class AddressBookRunner {
 				runner.sortByCity();
 				break;
 			case 9 :
+				runner.writeToFile();
+				break;
+			case 10 :
+				runner.readFromFile();
+				break;
+			case 11:
 				isExit=true;
 				break;
 			default :
