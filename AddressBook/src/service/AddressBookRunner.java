@@ -1,17 +1,32 @@
+/*******************************************************
+ * Purpose : Do address book operations
+ * @author Hrishikesh Ugavekar
+ * @Version 1.1
+ * @since 28-06-2021
+ *
+ ******************************************************/
 package service;
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+import com.opencsv.CSVReader;
+import com.opencsv.bean.ColumnPositionMappingStrategy;
+import com.opencsv.bean.StatefulBeanToCsv;
+import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 import model.Person;
 
@@ -249,15 +264,65 @@ public class AddressBookRunner {
 			readStream.close();
 		}
 	}
+	
+	/**
+	 * UC 14
+	 * Ability to Read the Address Book with Persons Contact
+     * as CSV File
+	 */
+	public void readCsv() {
+		try (CSVReader reader = new CSVReader(new FileReader("contacts.csv"));)
+		{
+			String[] nextLine;
+			while((nextLine = reader.readNext()) != null) {
+				if(nextLine != null) {
+					System.out.println(Arrays.toString(nextLine));
+				}
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println("Read complete");
+	}
+	
+	/**
+	 * UC 14
+	 * Ability to write the Address Book with Persons Contact
+     * as CSV File
+	 */
+	public void writeToCsv() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+		try(FileWriter writer = new FileWriter("contacts.csv"))
+		{
+			ColumnPositionMappingStrategy mappingStrategy=
+                    new ColumnPositionMappingStrategy();
+			
+			mappingStrategy.setType(Person.class);
+			String[] columns = new String[] {"FirstName","LastName","Address",
+					"city","state","zip","phone","email"};
+			mappingStrategy.setColumnMapping(columns);
+			
+			StatefulBeanToCsvBuilder<Person> builder = 
+					new StatefulBeanToCsvBuilder(writer); 
+			
+			StatefulBeanToCsv beanWriter = 
+			          builder.withMappingStrategy(mappingStrategy).build();
+			
+			beanWriter.write(personList1);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 		
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 		AddressBookRunner runner = new AddressBookRunner();
 		runner.displayWelcome();
 		
 		boolean isExit = false;
 		while (!isExit) {
 			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.SortByName\n"
-					+ "8.SortByCity\n9.WriteToFile\n10.ReadFromFile\n11.Exit");
+					+ "8.SortByCity\n9.WriteToFile\n10.ReadFromFile\n11.ReadCSV\n12.WriteToCsv\n13.Exit");
 			int userInput =sc.nextInt();
 			switch (userInput) {
 			case 1: 
@@ -291,7 +356,13 @@ public class AddressBookRunner {
 				runner.readFromFile();
 				break;
 			case 11:
-				isExit=true;
+				runner.readCsv();
+				break;
+			case 12:
+				runner.writeToCsv();
+				break;
+			case 13:
+				isExit = true;
 				break;
 			default :
 				System.out.println("Invalid input");
