@@ -6,6 +6,7 @@
  *
  ******************************************************/
 package service;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -21,6 +22,11 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import com.opencsv.CSVReader;
 import com.opencsv.bean.ColumnPositionMappingStrategy;
 import com.opencsv.bean.StatefulBeanToCsv;
@@ -291,9 +297,11 @@ public class AddressBookRunner {
 	 * Ability to write the Address Book with Persons Contact
      * as CSV File
 	 */
+	@SuppressWarnings("unchecked")
 	public void writeToCsv() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 		try(FileWriter writer = new FileWriter("contacts.csv"))
 		{
+			@SuppressWarnings("rawtypes")
 			ColumnPositionMappingStrategy mappingStrategy=
                     new ColumnPositionMappingStrategy();
 			
@@ -302,9 +310,11 @@ public class AddressBookRunner {
 					"city","state","zip","phone","email"};
 			mappingStrategy.setColumnMapping(columns);
 			
+			@SuppressWarnings("rawtypes")
 			StatefulBeanToCsvBuilder<Person> builder = 
 					new StatefulBeanToCsvBuilder(writer); 
 			
+			@SuppressWarnings("rawtypes")
 			StatefulBeanToCsv beanWriter = 
 			          builder.withMappingStrategy(mappingStrategy).build();
 			
@@ -314,6 +324,28 @@ public class AddressBookRunner {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Writes contacts to a json file.
+	 */
+	public void convertToJson() {
+		String result="";
+		try{
+			ObjectMapper mapper = new ObjectMapper();
+			result = mapper.writeValueAsString(personList1);
+			for(Person person : personList1) {
+				mapper.writeValue(new File("contact1.json"), person);
+			}
+			
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		System.out.println(result);
+     }
 		
 	public static void main(String[] args) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 		AddressBookRunner runner = new AddressBookRunner();
@@ -322,7 +354,7 @@ public class AddressBookRunner {
 		boolean isExit = false;
 		while (!isExit) {
 			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.SortByName\n"
-					+ "8.SortByCity\n9.WriteToFile\n10.ReadFromFile\n11.ReadCSV\n12.WriteToCsv\n13.Exit");
+					+ "8.SortByCity\n9.WriteToFile\n10.ReadFromFile\n11.ReadCSV\n12.WriteToCsv\n13.ConvertToJson\n14.Exit");
 			int userInput =sc.nextInt();
 			switch (userInput) {
 			case 1: 
@@ -362,6 +394,9 @@ public class AddressBookRunner {
 				runner.writeToCsv();
 				break;
 			case 13:
+				runner.convertToJson();
+				break;
+			case 14:
 				isExit = true;
 				break;
 			default :
