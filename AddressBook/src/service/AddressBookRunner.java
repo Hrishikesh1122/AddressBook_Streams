@@ -16,7 +16,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -373,6 +375,46 @@ public class AddressBookRunner {
 			System.out.println("Database Not Found");
 			return false;
 			
+		}
+	}
+	
+	/**
+	 * Ability to add a person to database.
+	 */
+	public void addContactToDatabase() {
+		connectToDatabase();
+		System.out.println("First Name :");
+		 String firstName = sc.next();
+		 System.out.println("Last name : ");
+		 String lastName = sc.next();
+		 System.out.println("Address :");
+		 String address = sc.next();
+		 System.out.println("City :");
+		 String city = sc.next();
+		 System.out.println("State :");
+		 String state = sc.next();
+		 System.out.println("Zip :");
+		 String zip = sc.next();
+		 System.out.println("Phone :");
+		 String phone = sc.next();
+		 System.out.println("Email :");
+		 String email = sc.next();
+		String query = "insert into persondetails (firstName,lastName,address,city,state,zip,phone,email) \r\n"
+				+ "values (?,?,?,?,?,?,?,?);";
+		try {
+			PreparedStatement preparedstatement = connection.prepareStatement(query);
+			preparedstatement.setString(1, firstName);
+			preparedstatement.setString(2, lastName);
+			preparedstatement.setString(3, address);
+			preparedstatement.setString(4, city);
+			preparedstatement.setString(5, state);
+			preparedstatement.setString(6, zip);
+			preparedstatement.setString(7, phone);
+			preparedstatement.setString(8, email);
+			preparedstatement.executeUpdate();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 		
