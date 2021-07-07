@@ -14,6 +14,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -42,6 +45,7 @@ public class AddressBookRunner {
 	 private ArrayList<Person> personList1 =null;
 	 private Map<String,ArrayList<Person>> Books= new HashMap<>();
 	 public String city;
+	 private Connection connection;
 
 	/**
 	 *Displays welcome message 
@@ -346,6 +350,31 @@ public class AddressBookRunner {
 		}
 		System.out.println(result);
      }
+	
+	/**
+	 * Ability to connect to database
+	 * @return true if connected successfully otherwise false
+	 */
+	public boolean connectToDatabase() {
+		try {
+			String jdbcURL ="jdbc:mysql://localhost:3306/addressbook?useSSL=false";
+			String userName = "root";
+			String password = "Hrishi123!@#";
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			System.out.println("Driver loaded");
+			System.out.println("Connecting to database " + jdbcURL);
+			connection = DriverManager.getConnection(jdbcURL,userName,password);
+			System.out.println("Connection successful");
+			return true;
+		} catch (ClassNotFoundException e) {
+			System.out.println("Driver not found");
+			return false;
+		} catch (SQLException e) {
+			System.out.println("Database Not Found");
+			return false;
+			
+		}
+	}
 		
 	public static void main(String[] args) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
 		AddressBookRunner runner = new AddressBookRunner();
@@ -354,7 +383,7 @@ public class AddressBookRunner {
 		boolean isExit = false;
 		while (!isExit) {
 			System.out.println("Enter options\n1.Add\n2.Edit\n3.Delete\n4.Show\n5.Search\n6.ShowCity\n7.SortByName\n"
-					+ "8.SortByCity\n9.WriteToFile\n10.ReadFromFile\n11.ReadCSV\n12.WriteToCsv\n13.ConvertToJson\n14.Exit");
+					+ "8.SortByCity\n9.WriteToFile\n10.ReadFromFile\n11.ReadCSV\n12.WriteToCsv\n13.ConvertToJson\n14.ConnectToDatabase\n15:Exit");
 			int userInput =sc.nextInt();
 			switch (userInput) {
 			case 1: 
@@ -396,7 +425,9 @@ public class AddressBookRunner {
 			case 13:
 				runner.convertToJson();
 				break;
-			case 14:
+			case 14 :
+				runner.connectToDatabase();
+			case 15:
 				isExit = true;
 				break;
 			default :
